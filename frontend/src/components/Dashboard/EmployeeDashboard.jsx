@@ -6,7 +6,7 @@ import ListTask from "../Tasklist/ListTask";
 export default function EmployeeDashboard() {
   return (
     <div className="h-screen bg-[#1c1c1c]">
-      <Header />
+      <Header userRole={'employee'} />
       <NumberOfListTasks />
       <ListTask />
     </div>

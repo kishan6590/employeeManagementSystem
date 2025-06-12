@@ -1,18 +1,48 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import apiClient from "../../../service/apiClient";
+import { jsx } from "react/jsx-runtime";
+import { useAuth } from "../../context/AuthContext";
+import { useUserData } from "../../context/UserDataContext";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { userData, setUserData } = useUserData();
 
-  function handleSubmit(e) {
+  const { isAdminLoggedIn, setIsAdminLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  async function handleSubmit(e) {
     e.preventDefault();
-    setEmail("");
-    setPassword("");
+    setError("");
+    setLoading(true);
+    try {
+      const data = await apiClient.adminLogin(email, password);
+      if (data?.success) {
+        setIsAdminLoggedIn(true);
+
+        navigate("/admin/dashboard");
+        console.log(data);
+        setEmail("");
+        setPassword("");
+      }
+      if (!data?.success) {
+        console.log(data);
+        setError(data?.message || "Login Failed");
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <div className=" h-screen w-screen flex items-center justify-center  ">
-      <form className=" rounded-2xl flex flex-col  items-center justify-center border-2  border-emerald-500 p-14">
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className=" rounded-2xl flex flex-col  items-center justify-center border-2  border-emerald-500 p-14"
+      >
         <input
           required
           value={email}
@@ -38,12 +68,9 @@ function AdminLogin() {
           type="submit"
         >
           Log in
-        </button>
-
-        <Link
-          to="/"
-          className=" transform translate-x-20 mt-1 text-slate-300"
-        >
+        </button>{" "}
+        {error && <h3 className="text-red-400 mt-2">{`Error : ${error}`}</h3>}
+        <Link to="/" className=" transform translate-x-20 mt-1 text-slate-300">
           Login as employee
         </Link>
       </form>

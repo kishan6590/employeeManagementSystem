@@ -6,11 +6,11 @@ import AllTask from "../../others/AllTask";
 function AdminDashboard() {
   return (
     <div className="h-screen w-full ">
-      <Header />
+      <Header userRole={"admin"} />
       <CreateTask />
     <AllTask/>
     </div>
-  );
+  ); 
 }
 
 export default AdminDashboard;

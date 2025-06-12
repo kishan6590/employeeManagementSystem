@@ -1,23 +1,52 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import apiClient from "../../../service/apiClient";
+import { useAuth } from "../../context/AuthContext";
+import { useUserData } from "../../context/UserDataContext";
 
 function EmployeeLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  function handleSubmit(e) {
+  const { isEmployeeLoggedIn, setIsEmployeeLoggedIn } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { userData, setUserData } = useUserData();
+  async function handleSubmit(e) {
     e.preventDefault();
-    setEmail('')
-    setPassword('')
+    setLoading(true);
+    setError("");
+
+    try {
+      const data = await apiClient.employeeLogin(email, password);
+      if (data?.success) {
+        console.log("data:", data);
+        setIsEmployeeLoggedIn(true);
+        navigate("/employee/dashboard");
+        setUserData(data.employee);
+        setEmail("");
+        setPassword("");
+      } else if (!data?.success) {
+        console.log("data:", data);
+        setError(data?.message || "Login Failed");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(true);
+    }
   }
   return (
     <div className=" h-screen w-screen flex items-center justify-center  ">
-      
-      <form className=" rounded-2xl flex flex-col  items-center justify-center border-2  border-emerald-500 p-14">
+      <form
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+        className=" rounded-2xl flex flex-col  items-center justify-center border-2  border-emerald-500 p-14"
+      >
         <input
-        required
-        
-        value={email}
+          required
+          value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
@@ -26,8 +55,8 @@ function EmployeeLogin() {
           type="email"
         />
         <input
-        required
-        value={password}
+          required
+          value={password}
           onChange={(e) => {
             setPassword(e.target.value);
           }}
@@ -41,8 +70,12 @@ function EmployeeLogin() {
         >
           Log in
         </button>
-        <Link to="/admin/login" className=" transform translate-x-20 mt-1 text-slate-300"> Login as admin</Link>
-        
+        <Link
+          to="/admin/login"
+          className=" transform translate-x-20 mt-1 text-slate-300"
+        >
+          Login as admin
+        </Link>
       </form>
     </div>
   );
