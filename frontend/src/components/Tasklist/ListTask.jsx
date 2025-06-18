@@ -12,7 +12,6 @@ function ListTask() {
       id="taskList"
       className="flex  overflow-x-auto mt-4  gap-4  h-[300px] mx-6"
     >
-      {console.log(userData)}
       {userData.tasks.map((element) => {
         if (element.active) return <AcceptTask element={element} />;
         if (element.failed) return <FailedTask element={element} />;

@@ -7,13 +7,19 @@ import { useUserData } from "../../context/UserDataContext";
 function EmployeeLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isEmployeeLoggedIn, setIsEmployeeLoggedIn } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { userData, setUserData } = useUserData();
+  const {
+    isAdminLoggedIn,
+    setIsAdminLoggedIn,
+    isEmployeeLoggedIn,
+    setIsEmployeeLoggedIn,
+  } = useAuth();
   async function handleSubmit(e) {
     e.preventDefault();
+
     setLoading(true);
     setError("");
 
@@ -21,9 +27,18 @@ function EmployeeLogin() {
       const data = await apiClient.employeeLogin(email, password);
       if (data?.success) {
         console.log("data:", data);
+        localStorage.setItem("isEmployeeLoggedIn", JSON.stringify(true));
+
+        // setIsEmployeeLoggedIn(
+        //   JSON.parse(localStorage.getItem("isEmployeeLoggedIn"))
+        // );
         setIsEmployeeLoggedIn(true);
         navigate("/employee/dashboard");
+        // setUserData(data.employee);
+
+        localStorage.setItem("data", JSON.stringify(data.employee));
         setUserData(data.employee);
+
         setEmail("");
         setPassword("");
       } else if (!data?.success) {
@@ -33,7 +48,7 @@ function EmployeeLogin() {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   }
   return (
@@ -70,6 +85,8 @@ function EmployeeLogin() {
         >
           Log in
         </button>
+        {error && <h3 className="text-red-400 mt-2">{`Error : ${error}`}</h3>}
+
         <Link
           to="/admin/login"
           className=" transform translate-x-20 mt-1 text-slate-300"

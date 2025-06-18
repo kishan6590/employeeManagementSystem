@@ -21,15 +21,17 @@ function AdminLogin() {
     try {
       const data = await apiClient.adminLogin(email, password);
       if (data?.success) {
-        setIsAdminLoggedIn(true);
+        localStorage.setItem("isAdminLoggedIn", true);
+        setIsAdminLoggedIn(localStorage.getItem("isAdminLoggedIn"));
 
         navigate("/admin/dashboard");
-        console.log(data);
+        // setUserData(data.admin);
+        setUserData(data.admin);
+        localStorage.setItem("data", JSON.stringify(data.admin));
         setEmail("");
         setPassword("");
       }
       if (!data?.success) {
-        console.log(data);
         setError(data?.message || "Login Failed");
       }
     } catch (error) {
@@ -68,11 +70,20 @@ function AdminLogin() {
           type="submit"
         >
           Log in
-        </button>{" "}
+        </button>
         {error && <h3 className="text-red-400 mt-2">{`Error : ${error}`}</h3>}
-        <Link to="/" className=" transform translate-x-20 mt-1 text-slate-300">
-          Login as employee
-        </Link>
+        <div className=" w-full pt-2 px-3">
+          <h3 className=" w-full ">
+            Not registered yet? <Link to="/signup"className="text-blue-400">Register</Link>
+          </h3>
+
+            <Link
+              to="/"
+              className=" transform translate-x-20 mt-1 text-blue-400"
+            >
+              Login as employee
+          </Link>
+        </div>
       </form>
     </div>
   );

@@ -8,6 +8,7 @@ class ApiClient {
   }
 
   async customFetch(endpoint, options = {}) {
+    // console.log("opins",JSON.parse(options.body));
     try {
       const url = `${this.baserURL}${endpoint}`;
       const headers = { ...this.defaultHeader, ...options.headers };
@@ -19,6 +20,7 @@ class ApiClient {
       const res = await fetch(url, config);
       const data = await res.json();
       console.log("url:", url);
+      console.log("data in admin customfetch", data);
       return data;
     } catch (error) {
       console.log("error", error);
@@ -34,7 +36,17 @@ class ApiClient {
       }),
     });
   }
-
+  async createAdmin(email, password, name) {
+    console.log({ email, password, name });
+    return this.customFetch("admin/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+        name,
+      }),
+    });
+  }
   async adminLogOut() {
     return this.customFetch("admin/logout", {
       method: "GET",
@@ -51,10 +63,41 @@ class ApiClient {
     });
   }
 
+  async createEmployee(email, password, name) {
+    return this.customFetch("employee/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+        name,
+      }),
+    });
+  }
+  async getEmployee() {
+    return this.customFetch("employee/getemployee", {
+      method: "GET",
+    });
+  }
   async employeeLogOut() {
     return await this.customFetch("employee/logout", {
       method: "GET",
     });
+  }
+  async createTask(data) {
+    return this.customFetch(
+      "task/create",
+
+      {
+        method: "POST",
+        body: JSON.stringify({
+          taskTitle: data.taskTitle,
+          taskDescription: data.taskDescription,
+          taskDate: data.date,
+          category: data.category,
+          assignedTo: data.assignTo,
+        }),
+      }
+    );
   }
 }
 
