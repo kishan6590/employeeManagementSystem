@@ -14,7 +14,7 @@ function FailedTask({ element }) {
       <p className="text-justify mt-2">{element.taskTitle}</p>
 
       <div className="bg-red-500 py-1 rounded-md flex justify-center mt-4">
-        <button>Failed</button>
+        <button >Failed</button>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ function CompleteTask({ element }) {
       <h2 className="text-2xl font-bold mt-4">{element.taskTitle}</h2>
       <p className="text-justify mt-2">{element.taskTitle}</p>
       <div className="flex justify-center rounded-md items-center py-1 bg-green-600 mt-4">
-        <button className=""> Complete</button>
+        <button className="" > Complete</button>
       </div>
     </div>
   );

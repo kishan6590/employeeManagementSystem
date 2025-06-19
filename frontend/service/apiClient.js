@@ -8,7 +8,6 @@ class ApiClient {
   }
 
   async customFetch(endpoint, options = {}) {
-    // console.log("opins",JSON.parse(options.body));
     try {
       const url = `${this.baserURL}${endpoint}`;
       const headers = { ...this.defaultHeader, ...options.headers };
@@ -19,8 +18,6 @@ class ApiClient {
       };
       const res = await fetch(url, config);
       const data = await res.json();
-      console.log("url:", url);
-      console.log("data in admin customfetch", data);
       return data;
     } catch (error) {
       console.log("error", error);
@@ -37,7 +34,6 @@ class ApiClient {
     });
   }
   async createAdmin(email, password, name) {
-    console.log({ email, password, name });
     return this.customFetch("admin/register", {
       method: "POST",
       body: JSON.stringify({
@@ -70,6 +66,15 @@ class ApiClient {
         email,
         password,
         name,
+      }),
+    });
+  }
+
+  async taskUpdate(id, action) {
+    return  this.customFetch(`employee/employeetaskupdate/${id}`, {
+      method: "POST",
+      body: JSON.stringify({
+        action,
       }),
     });
   }

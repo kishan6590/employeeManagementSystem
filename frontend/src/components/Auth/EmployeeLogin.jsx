@@ -26,15 +26,10 @@ function EmployeeLogin() {
     try {
       const data = await apiClient.employeeLogin(email, password);
       if (data?.success) {
-        console.log("data:", data);
         localStorage.setItem("isEmployeeLoggedIn", JSON.stringify(true));
 
-        // setIsEmployeeLoggedIn(
-        //   JSON.parse(localStorage.getItem("isEmployeeLoggedIn"))
-        // );
         setIsEmployeeLoggedIn(true);
         navigate("/employee/dashboard");
-        // setUserData(data.employee);
 
         localStorage.setItem("data", JSON.stringify(data.employee));
         setUserData(data.employee);
@@ -42,7 +37,6 @@ function EmployeeLogin() {
         setEmail("");
         setPassword("");
       } else if (!data?.success) {
-        console.log("data:", data);
         setError(data?.message || "Login Failed");
       }
     } catch (error) {

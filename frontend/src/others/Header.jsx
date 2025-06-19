@@ -23,7 +23,6 @@ function Header({ userRole }) {
           alert(data?.message);
         }
       } else if (userRole == "admin") {
-        console.log("starting logout");
         const data = await apiClient.adminLogOut();
 
         if (data?.success) {
@@ -38,7 +37,7 @@ function Header({ userRole }) {
         }
       }
     } catch (error) {
-      console.log("Error in loggingout ", error);
+      alert(error);
     }
   }
   return (
