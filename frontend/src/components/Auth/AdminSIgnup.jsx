@@ -21,7 +21,9 @@ function AdminSignup() {
         alert("Registeration Successfull");
       }
       if (!data.success) {
-        setError(data.message);
+        setError(data?.message||data?.errors[0]?.msg);
+        console.log("hi", data.errors[0].msg);
+        
       }
     } catch (error) {
       setError(error);
@@ -62,22 +64,24 @@ function AdminSignup() {
           <label htmlFor="" className="mb-1 text-xl">
             Password
           </label>
+
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
             className="w-[92%] text-2xl  px-3 py-2 outline-none border-2 border-emerald-700 rounded-md   bg-transparent"
-          />
+            />
           <button
             type="submit"
             className="bg-emerald-700 mr-7 mt-5 rounded-sm text-2xl px-3 py-2 mb-2"
-          >
+            >
             Create Account
           </button>
+            {error && <h3 className="text-red-400 mt-2">{`Error : ${error}`}</h3>}
         </form>
         <h3 className="mb-6-  text-end pr-8">
-          Already have Account?{" "}
+          Already have Account?
           <Link to="/" className="text-blue-400">
             Login
           </Link>

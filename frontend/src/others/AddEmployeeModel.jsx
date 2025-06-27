@@ -32,11 +32,10 @@ function AddEmployeeModel({ showModel, setShowModel }) {
         const data = await apiClient.getEmployee();
         if (data.success) {
           setUserData(data);
-           
         }
       }
       if (!data.success) {
-        setError(data.message);
+        setError(data.message || data.errors[0].msg);
       }
     } catch (error) {
       setError(error);
@@ -89,11 +88,13 @@ function AddEmployeeModel({ showModel, setShowModel }) {
             className="w-[92%] text-2xl  px-3 py-2 outline-none border-2 border-emerald-700 rounded-md   bg-transparent"
           />
           <button
+            disabled={loading}
             type="submit"
             className="bg-emerald-700 mr-7 mt-5 rounded-sm text-2xl px-3 py-2 mb-2"
           >
-            Add Employee
+            {loading ? "Add Employee..." : "Add Employee"}
           </button>
+          {error && <h3 className="text-red-400 mt-2">{`Error : ${error}`}</h3>}
         </form>
       </div>
     </div>

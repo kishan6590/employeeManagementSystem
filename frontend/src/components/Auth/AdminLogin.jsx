@@ -25,14 +25,13 @@ function AdminLogin() {
         setIsAdminLoggedIn(localStorage.getItem("isAdminLoggedIn"));
 
         navigate("/admin/dashboard");
-        // setUserData(data.admin);
         setUserData(data.admin);
         localStorage.setItem("data", JSON.stringify(data.admin));
         setEmail("");
         setPassword("");
       }
       if (!data?.success) {
-        setError(data?.message || "Login Failed");
+        setError(data?.message || data.errors[0].msg || "Login Failed");
       }
     } catch (error) {
     } finally {
@@ -66,22 +65,23 @@ function AdminLogin() {
           type="password"
         />
         <button
+          disabled={loading}
           className="w-full border-none w- text-2xl bg-emerald-700 rounded-full  px-auto py-2  mt-4"
           type="submit"
         >
-          Log in
+          {loading ? "Login..." : "Log in"}
         </button>
         {error && <h3 className="text-red-400 mt-2">{`Error : ${error}`}</h3>}
         <div className=" w-full pt-2 px-3">
           <h3 className=" w-full ">
-            Not registered yet? <Link to="/signup"className="text-blue-400">Register</Link>
+            Not registered yet?{" "}
+            <Link to="/signup" className="text-blue-400">
+              Register
+            </Link>
           </h3>
 
-            <Link
-              to="/"
-              className=" transform translate-x-20 mt-1 text-blue-400"
-            >
-              Login as employee
+          <Link to="/" className=" transform translate-x-20 mt-1 text-blue-400">
+            Login as employee
           </Link>
         </div>
       </form>
