@@ -1,6 +1,6 @@
 class ApiClient {
   constructor() {
-    (this.baserURL = ` ${import.meta.env.VITE_API_URL}/api/v1`),
+    (this.baserURL = ` ${import.meta.env.VITE_API_URL}/api/v1/`),
       (this.defaultHeader = {
         "Content-type": "application/json",
         Accept: "application/json",
