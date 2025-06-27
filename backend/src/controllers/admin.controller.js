@@ -101,7 +101,7 @@ const loginAdmin = async (req, res) => {
   }
 };
 const logOutAdmin = async (req, res) => {
-  const isProduction = process.env.NODE_ENV == "production ";
+  const isProduction = process.env.NODE_ENV == "production";
   try {
     const cookieOption = {
       httpOnly: true,
