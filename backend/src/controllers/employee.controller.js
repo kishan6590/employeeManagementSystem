@@ -9,7 +9,7 @@ const loginEmplpoyee = async (req, res) => {
       email,
     })
       .populate("tasks")
-      .select("-password");
+      
 
     if (!employee) {
       return res.status(400).json({
