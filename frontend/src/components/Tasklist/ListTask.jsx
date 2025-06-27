@@ -7,6 +7,7 @@ import { UserDataProvider, useUserData } from "../../context/UserDataContext";
 
 function ListTask() {
   const { userData, setUserData } = useUserData();
+  console.log("userData", userData.tasks);
   return (
     <div
       id="taskList"
