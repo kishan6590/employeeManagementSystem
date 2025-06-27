@@ -74,7 +74,7 @@ const loginAdmin = async (req, res) => {
       expiresIn: 24 * 60 * 60 * 1000,
     });
 
-    const isProduction = process.env.NODE_ENV == "production ";
+    const isProduction = process.env.NODE_ENV == "production";
 
     const cookieOption = {
       httpOnly: true,
