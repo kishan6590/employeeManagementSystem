@@ -18,7 +18,6 @@ const createAdmin = async (req, res) => {
     const latestAdmin = await Admin.findOne().sort({ admin_id: -1 });
     const id = latestAdmin ? latestAdmin.admin_id + 1 : 1;
 
-
     const employee = await Admin.create({
       email,
       password,
@@ -75,10 +74,12 @@ const loginAdmin = async (req, res) => {
       expiresIn: 24 * 60 * 60 * 1000,
     });
 
+    const isProduction = process.env.NODE_ENV == "production ";
+
     const cookieOption = {
       httpOnly: true,
-      sameSite: "Lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isProduction ? "none" : "Lax",
+      secure: isProduction,
       maxAge: 25 * 60 * 60 * 1000,
     };
     res.cookie("token", token, cookieOption);
@@ -100,11 +101,12 @@ const loginAdmin = async (req, res) => {
   }
 };
 const logOutAdmin = async (req, res) => {
+  const isProduction = process.env.NODE_ENV == "production ";
   try {
     const cookieOption = {
       httpOnly: true,
-      sameSite: "Lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isProduction ? "none" : "Lax",
+      secure: isProduction,
       expires: new Date(0),
     };
     res.cookie("token", "", cookieOption);
