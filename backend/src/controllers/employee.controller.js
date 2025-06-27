@@ -7,9 +7,9 @@ const loginEmplpoyee = async (req, res) => {
   try {
     const employee = await Employee.findOne({
       email,
-    });
-    // .populate("tasks")
-    // .select("-password");
+    })
+      .populate("tasks")
+      .select("-password");
 
     if (!employee) {
       return res.status(400).json({
@@ -40,7 +40,14 @@ const loginEmplpoyee = async (req, res) => {
     return res.status(200).json({
       message: "Login Successfull",
       success: true,
-      employee,
+      employee: {
+        gamil: employee.gamil,
+        tasks: employee.tasks,
+        taskCounts: employee.taskCounts,
+        name: employee.name,
+        createdBy: employee.createdBy,
+        createdAt: employee.createdAt,
+      },
       token,
     });
   } catch (error) {
