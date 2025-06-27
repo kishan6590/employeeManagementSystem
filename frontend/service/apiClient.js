@@ -1,6 +1,6 @@
 class ApiClient {
   constructor() {
-    (this.baserURL = import.meta.env.VITE_API_URL),
+    (this.baserURL = ` ${import.meta.env.VITE_API_URL}/api/v1`),
       (this.defaultHeader = {
         "Content-type": "application/json",
         Accept: "application/json",
@@ -71,7 +71,7 @@ class ApiClient {
   }
 
   async taskUpdate(id, action) {
-    return  this.customFetch(`employee/employeetaskupdate/${id}`, {
+    return this.customFetch(`employee/employeetaskupdate/${id}`, {
       method: "POST",
       body: JSON.stringify({
         action,
