@@ -1,29 +1,39 @@
 import Employee from "../models/Employee.model.js";
 import jwt from "jsonwebtoken";
 import Task from "../models/Task.model.js";
+import bcrypt from "bcryptjs";
 const loginEmplpoyee = async (req, res) => {
   const { email, password } = req.body;
   try {
     const employee = await Employee.findOne({
       email,
-      password,
-    })
-      .populate("tasks")
-      .select("-password");
+    });
+    // .populate("tasks")
+    // .select("-password");
+
     if (!employee) {
       return res.status(400).json({
         message: "Invalid Username or Password",
         success: false,
       });
     }
+    const isMatch = await bcrypt.compare(password, employee.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Invalid Username or Password",
+        success: false,
+      });
+    }
+
     const token = jwt.sign({ id: employee._id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "24h",
     });
+    const isProduction = process.env.NODE_ENV == "production";
 
     const cookieOptions = {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       maxAge: 24 * 60 * 60 * 1000,
     };
     res.cookie("token", token, cookieOptions);
@@ -43,10 +53,11 @@ const loginEmplpoyee = async (req, res) => {
 };
 
 const logoutEmployee = async (req, res) => {
+  const isProduction = process.env.NODE_ENV == "production";
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     expires: new Date(0),
   };
   res.cookie("token", "", cookieOptions);
