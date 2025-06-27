@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://employee-management-system-ten-pearl.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
     allowedHeaders: ["Content-Type", "authorization"],
@@ -26,7 +26,7 @@ app.use(cookieparser());
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/employee", employeeRoutes);
 app.use("/api/v1/task", taskRoutes);
-connectDB();  
+connectDB();
 app.listen(PORT, () => {
   console.log(`🐦‍🔥Server is running on ${PORT}`);
 });

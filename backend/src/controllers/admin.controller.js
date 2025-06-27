@@ -25,7 +25,6 @@ const createAdmin = async (req, res) => {
       name,
       admin_id: id,
     });
-    console.log("4");
 
     return res.status(201).json({
       message: "Admin registered successfully",
@@ -45,7 +44,6 @@ const loginAdmin = async (req, res) => {
 
   try {
     const admin = await Admin.findOne({ email });
-    console.log("admin:", admin._id);
     if (!admin) {
       return res.status(400).json({
         message: "Incorrect Email or Password",
@@ -84,7 +82,6 @@ const loginAdmin = async (req, res) => {
       maxAge: 25 * 60 * 60 * 1000,
     };
     res.cookie("token", token, cookieOption);
-    console.log(allEmployee);
     return res.status(200).json({
       message: "Logged in successfully",
       success: true,
@@ -95,7 +92,6 @@ const loginAdmin = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log("error: ", error);
     return res.status(400).json({
       message: "Login failed ",
       success: false,
